@@ -7,7 +7,6 @@ ARG PROJECT_NAME=ego_planner
 
 # install binary
 RUN apt update && \
-RUN apt update && \
     apt install -y vim tree wget curl git rename && \
     apt install -y libarmadillo-dev && \
     rm -rf /var/lib/apt/lists/*
