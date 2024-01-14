@@ -30,9 +30,9 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 
 # compile project
 COPY . /home/$USERNAME/code/${PROJECT_NAME}
-RUN sudo chmod 777 /home/$USERNAME/code/${PROJECT_NAME}
 WORKDIR /home/$USERNAME/code/${PROJECT_NAME}
-RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
+RUN sudo chmod 777 -R /home/$USERNAME/code/${PROJECT_NAME} && \
+    . /opt/ros/${ROS_DISTRO}/setup.sh && \
     catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release
 
 ENTRYPOINT [ "/bin/zsh" ]
