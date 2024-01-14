@@ -1,4 +1,16 @@
-# Note!
+# Note
+
+This repository is forked from the ego planner. Make the ego planner into a docker image. Run the following line to get the image. Unfinished!
+
+```shell
+docker pull endermands/ego_planner:latest
+docker run --net host --rm --name -it ego_planner endermands/ego_planner:latest
+```
+
+
+
+# EGO-Swarm
+
 Our recently developed planner [EGO-Swarm](https://github.com/ZJU-FAST-Lab/ego-planner-swarm) is an evolution from EGO-Planner. 
 It is more robust and safe, and therefore, is more recommended to use.
 If you have only one drone, just set the `drone_id` to `0` in EGO-Swarm's launch files.
@@ -7,7 +19,7 @@ Of course, some topic names are changed from EGO-Planner, check it using `rqt_gr
 # Quick Start within 3 Minutes 
 Compiling tests passed on ubuntu **16.04, 18.04 and 20.04** with ros installed.
 You can just execute the following commands one by one.
-```
+```shell
 sudo apt-get install libarmadillo-dev
 git clone https://github.com/ZJU-FAST-Lab/ego-planner.git
 cd ego-planner
@@ -53,7 +65,7 @@ EGO-Planner: An ESDF-free Gradient-based Local Planner for Quadrotors, Xin Zhou,
 **Step 1**. Install [Armadillo](http://arma.sourceforge.net/), which is required by **uav_simulator**.
 ```
 sudo apt-get install libarmadillo-dev
-``` 
+```
 
 **Step 2**. Clone the code from github or gitee. This two repositories synchronize automaticly.
 
@@ -119,17 +131,17 @@ You can add customized arguments after **"args"**. The default is **"-DCMAKE_BUI
 
  ## 4. Use GPU or Not
  Packages in this repo, **local_sensing** have GPU, CPU two different versions. By default, they are in CPU version for better compatibility. By changing
- 
+
  ```
  set(ENABLE_CUDA false)
  ```
- 
+
  in the _CMakeList.txt_ in **local_sensing** packages, to
- 
+
  ```
  set(ENABLE_CUDA true)
  ```
- 
+
 CUDA will be turned-on to generate depth images as a real depth camera does. 
 
 Please remember to also change the 'arch' and 'code' flags in the line of 
@@ -137,9 +149,9 @@ Please remember to also change the 'arch' and 'code' flags in the line of
     set(CUDA_NVCC_FLAGS 
       -gencode arch=compute_61,code=sm_61;
     ) 
-``` 
+```
 in _CMakeList.txt_. If you encounter compiling error due to different Nvidia graphics card you use or you can not see proper depth images as expected, you can check the right code via [link1](https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/) or [link2](https://github.com/tpruvot/ccminer/wiki/Compatibility).
- 
+
 Don't forget to re-compile the code!
 
 **local_sensing** is the simulated sensors. If ```ENABLE_CUDA``` **true**, it mimics the depth measured by stereo cameras and renders a depth image by GPU. If ```ENABLE_CUDA``` **false**, it will publish pointclouds with no ray-casting. Our local mapping module automatically selects whether depth images or pointclouds as its input.
@@ -207,7 +219,7 @@ sudo apt install librealsense2-utils=2.30.0-0~realsense0.1693
 sudo apt install librealsense2-dev=2.30.0-0~realsense0.1693
 sudo apt remove librealsense2-udev-rules
 sudo apt install librealsense2-udev-rules=2.30.0-0~realsense0.1693
-``` 
+```
 Here you can varify the installation by 
 ```
 realsense-viewer
