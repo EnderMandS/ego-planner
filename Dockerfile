@@ -7,8 +7,8 @@ ARG PROJECT_NAME=ego_planner
 
 # install binary
 RUN apt update && \
-    apt install -y vim tree wget curl git rename build-essential cmake && \
-    apt install -y libarmadillo-dev && \
+    apt install -y vim tree wget curl git rename && \
+    apt install -y libeigen3-dev libarmadillo-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # setup user
