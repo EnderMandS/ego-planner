@@ -42,7 +42,7 @@ RUN sudo apt update && \
 
 # compile project
 WORKDIR /home/$USERNAME/code/ros_ws/src
-RUN git clone --depth 1 ${PROJECT_NAME} https://github.com/EnderMandS/ego-planner.git && \
+RUN git clone --depth 1 https://github.com/EnderMandS/ego-planner.git && \
     sudo cp -r .vscode /home/${USERNAME}/code/ros_ws && sudo rm -rf .vscode && \
     sudo chmod 777 -R /home/$USERNAME/code && \
     . /opt/ros/${ROS_DISTRO}/setup.sh && \
