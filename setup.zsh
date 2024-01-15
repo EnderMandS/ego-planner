@@ -1,3 +1,3 @@
 #!/bin/zsh
-source /home/m/code/ego_planner/devel/setup.zsh
-roslaunch plan_manege run.launch
+source /home/m/code/ros_ws/devel/setup.zsh
+roslaunch plan_manage run.launch

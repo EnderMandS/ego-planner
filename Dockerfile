@@ -7,7 +7,7 @@ ARG PROJECT_NAME=ego_planner
 
 # install binary
 RUN apt update && \
-    apt install -y vim tree wget curl git rename && \
+    apt install -y vim tree wget curl git rename unzip ninja-build && \
     apt install -y libeigen3-dev && \
     apt install -y libarmadillo-dev && \
     apt install -y ros-${ROS_DISTRO}-pcl-conversions && \
@@ -30,12 +30,18 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -p https://github.com/zsh-users/zsh-syntax-highlighting && \
     sudo rm -rf /var/lib/apt/lists/*
 
+# OpenCV
+WORKDIR /home/$USERNAME/pkg/OpenCV
+RUN wget -O opencv.zip https://github.com/opencv/opencv/archive/4.x.zip && \
+    unzip opencv.zip && rm opencv.zip && mkdir -p build && cd build && \
+    cmake -GNinja ../opencv-4.x && ninja && sudo ninja install && ninja clean
+
 # compile project
-COPY . /home/$USERNAME/code/${PROJECT_NAME}
-WORKDIR /home/$USERNAME/code/${PROJECT_NAME}
-RUN sudo chmod 777 -R /home/$USERNAME/code/${PROJECT_NAME} && \
+WORKDIR /home/$USERNAME/code/ros_ws
+COPY . /home/$USERNAME/code/ros_ws/src/${PROJECT_NAME}
+RUN sudo chmod 777 -R /home/$USERNAME/code/ros_ws/src/${PROJECT_NAME} && \
     . /opt/ros/${ROS_DISTRO}/setup.sh && \
     catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release
 
 ENTRYPOINT [ "/bin/zsh" ]
-# ENTRYPOINT [ "/home/$USERNAME/code/${PROJECT_NAME}/setup.zsh" ]
+# ENTRYPOINT [ "/home/$USERNAME/code/ros_ws/src/${PROJECT_NAME}/setup.zsh" ]
