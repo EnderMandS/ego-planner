@@ -36,13 +36,18 @@ RUN wget -O opencv.zip https://github.com/opencv/opencv/archive/4.x.zip && \
     unzip opencv.zip && rm opencv.zip && mkdir -p build && cd build && \
     cmake -GNinja ../opencv-4.x && ninja && sudo ninja install && ninja clean && \
     sudo rm -rf /home/$USERNAME/pkg
+RUN sudo apt update && \
+    sudo apt install -y ros-${ROS_DISTRO}-cv-bridge && \
+    sudo rm -rf /var/lib/apt/lists/*
 
 # compile project
 WORKDIR /home/$USERNAME/code/ros_ws
 COPY . /home/$USERNAME/code/ros_ws/src/${PROJECT_NAME}
+COPY .vscode /home/$USERNAME/code/ros_ws/
 RUN sudo chmod 777 -R /home/$USERNAME/code && \
     . /opt/ros/${ROS_DISTRO}/setup.sh && \
-    catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release
+    catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release && \
+    echo "source /home/${USERNAME}/code/ros_ws/devel/setup.zsh" >> /home/${USERNAME}/.zshrc
 
 ENTRYPOINT [ "/bin/zsh" ]
 # ENTRYPOINT [ "/home/$USERNAME/code/ros_ws/src/${PROJECT_NAME}/setup.zsh" ]
