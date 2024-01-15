@@ -34,12 +34,13 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 WORKDIR /home/$USERNAME/pkg/OpenCV
 RUN wget -O opencv.zip https://github.com/opencv/opencv/archive/4.x.zip && \
     unzip opencv.zip && rm opencv.zip && mkdir -p build && cd build && \
-    cmake -GNinja ../opencv-4.x && ninja && sudo ninja install && ninja clean
+    cmake -GNinja ../opencv-4.x && ninja && sudo ninja install && ninja clean && \
+    sudo rm -rf /home/$USERNAME/pkg
 
 # compile project
 WORKDIR /home/$USERNAME/code/ros_ws
 COPY . /home/$USERNAME/code/ros_ws/src/${PROJECT_NAME}
-RUN sudo chmod 777 -R /home/$USERNAME/code/ros_ws/src/${PROJECT_NAME} && \
+RUN sudo chmod 777 -R /home/$USERNAME/code && \
     . /opt/ros/${ROS_DISTRO}/setup.sh && \
     catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release
 
