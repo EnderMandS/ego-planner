@@ -10,7 +10,7 @@ RUN apt update && \
     apt install -y vim tree wget curl git rename unzip ninja-build && \
     apt install -y libeigen3-dev && \
     apt install -y libarmadillo-dev && \
-    apt install -y ros-${ROS_DISTRO}-pcl-conversions && \
+    apt install -y ros-${ROS_DISTRO}-pcl-conversions ros-${ROS_DISTRO}-tf && \
     rm -rf /var/lib/apt/lists/*
 
 # setup user
