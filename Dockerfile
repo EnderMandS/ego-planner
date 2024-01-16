@@ -15,8 +15,8 @@ RUN sudo apt update && \
     sudo rm -rf /var/lib/apt/lists/*
 
 # compile project
-WORKDIR /home/$USERNAME/code/ros_ws/src
-RUN git clone --depth 1 https://github.com/EnderMandS/ego-planner.git && \
+WORKDIR /home/$USERNAME/code/ros_ws
+RUN mkdir src && git clone --depth 1 https://github.com/EnderMandS/ego-planner.git src/ && \
     sudo chmod 777 -R /home/$USERNAME/code && . /opt/ros/${ROS_DISTRO}/setup.sh && \
     catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release && \
     echo "source /home/${USERNAME}/code/ros_ws/devel/setup.zsh" >> /home/${USERNAME}/.zshrc
