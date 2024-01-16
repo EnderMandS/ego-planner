@@ -6,7 +6,7 @@ ARG USERNAME=m
 ARG PROJECT_NAME=ego-planner
 
 # install binary
-RUN DEBIAN_FRONTEND=noninteractive sudo apt update && \
+RUN sudo apt update && \
     sudo apt install -y libarmadillo-dev && \
     sudo apt install -y ros-${ROS_DISTRO}-pcl-conversions ros-${ROS_DISTRO}-pcl-ros ros-${ROS_DISTRO}-pcl-msgs && \
     sudo apt install -y ros-${ROS_DISTRO}-tf ros-${ROS_DISTRO}-tf2 ros-${ROS_DISTRO}-laser-geometry && \
