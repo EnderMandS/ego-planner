@@ -10,7 +10,7 @@ RUN sudo apt update && \
     sudo apt install -y libarmadillo-dev && \
     sudo apt install -y ros-${ROS_DISTRO}-pcl-conversions ros-${ROS_DISTRO}-pcl-ros ros-${ROS_DISTRO}-pcl-msgs && \
     sudo apt install -y ros-${ROS_DISTRO}-tf ros-${ROS_DISTRO}-tf2 ros-${ROS_DISTRO}-laser-geometry && \
-    sudo apt install -y ros-${ROS_DISTRO}-rviz && \
+    DEBIAN_FRONTEND=noninteractive sudo apt install -y ros-${ROS_DISTRO}-rviz && \
     sudo rm -rf /var/lib/apt/lists/*
 
 # compile project
