@@ -6,9 +6,7 @@ ARG USERNAME=m
 ARG PROJECT_NAME=ego-planner
 
 # install binary
-RUN sudo apt update && \
-    # apt install -y vim tree wget curl git unzip ninja-build && \ 
-    # apt install -y libeigen3-dev && \
+RUN DEBIAN_FRONTEND=noninteractive sudo apt update && \
     sudo apt install -y libarmadillo-dev && \
     sudo apt install -y ros-${ROS_DISTRO}-pcl-conversions ros-${ROS_DISTRO}-pcl-ros ros-${ROS_DISTRO}-pcl-msgs && \
     sudo apt install -y ros-${ROS_DISTRO}-tf ros-${ROS_DISTRO}-tf2 ros-${ROS_DISTRO}-laser-geometry && \
