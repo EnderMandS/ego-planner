@@ -6,6 +6,8 @@
 
   <!-- topic of your odometry such as VIO or LIO -->
   <arg name="odom_topic" value="/odom" />
+  <!-- topic of imu -->
+  <arg name="imu_topic" value="/imu" />
 
   <!-- main algorithm params -->
   <include file="$(find ego_planner)/launch/advanced_param.xml">
@@ -14,6 +16,7 @@
     <arg name="map_size_y_" value="$(arg map_size_y)"/>
     <arg name="map_size_z_" value="$(arg map_size_z)"/>
     <arg name="odometry_topic" value="$(arg odom_topic)"/>
+    <arg name="imu_topic" value="$(arg imu_topic)"/>
 
     <!-- camera pose: transform of camera frame in the world frame -->
     <!-- depth topic: depth image, 640x480 by default -->
