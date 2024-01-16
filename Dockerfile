@@ -6,12 +6,12 @@ ARG USERNAME=m
 ARG PROJECT_NAME=ego-planner
 
 # install binary
-RUN apt update && \
+RUN sudo apt update && \
     # apt install -y vim tree wget curl git unzip ninja-build && \ 
     # apt install -y libeigen3-dev && \
-    apt install -y libarmadillo-dev && \
-    apt install -y ros-${ROS_DISTRO}-pcl-conversions ros-${ROS_DISTRO}-pcl-ros ros-${ROS_DISTRO}-tf && \
-    rm -rf /var/lib/apt/lists/*
+    sudo apt install -y libarmadillo-dev && \
+    sudo apt install -y ros-${ROS_DISTRO}-pcl-conversions ros-${ROS_DISTRO}-pcl-ros ros-${ROS_DISTRO}-tf && \
+    sudo rm -rf /var/lib/apt/lists/*
 
 # compile project
 WORKDIR /home/$USERNAME/code/ros_ws/src
