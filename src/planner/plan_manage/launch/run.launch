@@ -6,8 +6,6 @@
 
   <!-- topic of your odometry such as VIO or LIO -->
   <arg name="odom_topic" value="/odom" />
-  <!-- topic of imu -->
-  <arg name="imu_topic" value="/imu" />
 
   <!-- main algorithm params -->
   <include file="$(find ego_planner)/launch/advanced_param.xml">
@@ -16,23 +14,22 @@
     <arg name="map_size_y_" value="$(arg map_size_y)"/>
     <arg name="map_size_z_" value="$(arg map_size_z)"/>
     <arg name="odometry_topic" value="$(arg odom_topic)"/>
-    <arg name="imu_topic" value="$(arg imu_topic)"/>
 
     <!-- camera pose: transform of camera frame in the world frame -->
     <!-- depth topic: depth image, 640x480 by default -->
     <!-- don't set cloud_topic if you already set these ones! -->
     <arg name="camera_pose_topic" value="/camera_pose"/>
-    <arg name="depth_topic" value="/camrea_depth"/>
+    <arg name="depth_topic" value="/camera_depth"/>
 
     <!-- topic of point cloud measurement, such as from LIDAR  -->
     <!-- don't set camera pose and depth, if you already set this one! -->
     <arg name="cloud_topic" value="/cloud"/>
 
     <!-- intrinsic params of the depth camera -->
-    <arg name="cx" value="321.04638671875"/>
-    <arg name="cy" value="243.44969177246094"/>
-    <arg name="fx" value="387.229248046875"/>
-    <arg name="fy" value="387.229248046875"/>
+    <arg name="cx" value="320.0"/>
+    <arg name="cy" value="200.0"/>
+    <arg name="fx" value="319.9999694824219"/>
+    <arg name="fy" value="320.0000305175781"/>
 
     <!-- maximum velocity and acceleration the drone will reach -->
     <arg name="max_vel" value="2.0" />

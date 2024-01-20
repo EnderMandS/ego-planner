@@ -39,7 +39,6 @@
   <!-- main node -->
   <node pkg="ego_planner" name="ego_planner_node" type="ego_planner_node" output="screen">
     <remap from="/odom_world" to="$(arg odometry_topic)"/>
-    <remap from="/imu" to="$(arg imu_topic)"/>
     <remap from="/grid_map/odom" to="$(arg odometry_topic)"/>
     <remap from="/grid_map/cloud" to="$(arg cloud_topic)"/>
     <remap from = "/grid_map/pose"   to = "$(arg camera_pose_topic)"/> 
