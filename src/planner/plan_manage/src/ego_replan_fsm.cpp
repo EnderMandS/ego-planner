@@ -1,5 +1,6 @@
 
 #include <plan_manage/ego_replan_fsm.h>
+#include <quadrotor_msgs/ExecStatus.h>
 
 namespace ego_planner
 {
@@ -40,6 +41,8 @@ namespace ego_planner
 
     bspline_pub_ = nh.advertise<ego_planner::Bspline>("/planning/bspline", 10);
     data_disp_pub_ = nh.advertise<ego_planner::DataDisp>("/planning/data_display", 100);
+
+    exec_state_pub_ = nh.advertise<quadrotor_msgs::ExecStatus>("/planning/exec_state", 1);
 
     if (target_type_ == TARGET_TYPE::MANUAL_TARGET)
       waypoint_sub_ = nh.subscribe("/waypoint_generator/waypoints", 1, &EGOReplanFSM::waypointCallback, this);
@@ -184,6 +187,12 @@ namespace ego_planner
     int pre_s = int(exec_state_);
     exec_state_ = new_state;
     cout << "[" + pos_call + "]: from " + state_str[pre_s] + " to " + state_str[int(new_state)] << endl;
+
+    // publish exec_state_
+    quadrotor_msgs::ExecStatus exec_status;
+    exec_status.exec_flag = exec_state_;
+    exec_status.header.stamp = ros::Time::now();
+    exec_state_pub_.publish(exec_status);
   }
 
   std::pair<int, EGOReplanFSM::FSM_EXEC_STATE> EGOReplanFSM::timesOfConsecutiveStateCalls()
