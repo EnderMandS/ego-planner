@@ -42,7 +42,7 @@ namespace ego_planner
     bspline_pub_ = nh.advertise<ego_planner::Bspline>("/planning/bspline", 10);
     data_disp_pub_ = nh.advertise<ego_planner::DataDisp>("/planning/data_display", 100);
 
-    exec_state_pub_ = nh.advertise<quadrotor_msgs::ExecStatus>("/planning/exec_state", 1);
+    exec_state_pub_ = nh.advertise<quadrotor_msgs::ExecStatus>("/planning/exec_status", 1);
 
     if (target_type_ == TARGET_TYPE::MANUAL_TARGET)
       waypoint_sub_ = nh.subscribe("/waypoint_generator/waypoints", 1, &EGOReplanFSM::waypointCallback, this);
@@ -114,12 +114,16 @@ namespace ego_planner
     if (msg->poses[0].pose.position.z < -0.1)
       return;
 
-    cout << "Triggered!" << endl;
+    ROS_INFO("New waypoint x:%.1f, y:%.1f, z:%.1f",
+              msg->poses[0].pose.position.x,
+              msg->poses[0].pose.position.y,
+              msg->poses[0].pose.position.z);
+    // cout << "Triggered!" << endl;
     trigger_ = true;
     init_pt_ = odom_pos_;
 
     bool success = false;
-    end_pt_ << msg->poses[0].pose.position.x, msg->poses[0].pose.position.y, 1.0;
+    end_pt_ << msg->poses[0].pose.position.x, msg->poses[0].pose.position.y, msg->poses[0].pose.position.z;
     success = planner_manager_->planGlobalTraj(odom_pos_, odom_vel_, Eigen::Vector3d::Zero(), end_pt_, Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero());
 
     visualization_->displayGoalPoint(end_pt_, Eigen::Vector4d(0, 0.5, 0.5, 1), 0.3, 0);
@@ -187,12 +191,6 @@ namespace ego_planner
     int pre_s = int(exec_state_);
     exec_state_ = new_state;
     cout << "[" + pos_call + "]: from " + state_str[pre_s] + " to " + state_str[int(new_state)] << endl;
-
-    // publish exec_state_
-    quadrotor_msgs::ExecStatus exec_status;
-    exec_status.exec_flag = exec_state_;
-    exec_status.header.stamp = ros::Time::now();
-    exec_state_pub_.publish(exec_status);
   }
 
   std::pair<int, EGOReplanFSM::FSM_EXEC_STATE> EGOReplanFSM::timesOfConsecutiveStateCalls()
@@ -209,6 +207,11 @@ namespace ego_planner
 
   void EGOReplanFSM::execFSMCallback(const ros::TimerEvent &e)
   {
+    // publish exec_state_
+    quadrotor_msgs::ExecStatus exec_status;
+    exec_status.exec_flag = exec_state_;
+    exec_status.header.stamp = ros::Time::now();
+    exec_state_pub_.publish(exec_status);
 
     static int fsm_num = 0;
     fsm_num++;
