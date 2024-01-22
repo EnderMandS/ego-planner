@@ -20,6 +20,8 @@ find_package(catkin REQUIRED COMPONENTS
   traj_utils
   message_generation
   cv_bridge
+  tf
+  std_srvs
 )
 
 # Generate messages in the 'msg' folder
@@ -40,7 +42,7 @@ generate_messages(
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES ego_planner
- CATKIN_DEPENDS plan_env path_searching bspline_opt traj_utils message_runtime
+ CATKIN_DEPENDS plan_env path_searching bspline_opt traj_utils message_runtime std_srvs tf
 #  DEPENDS system_lib
 )
 

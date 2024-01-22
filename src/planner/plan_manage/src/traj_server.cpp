@@ -2,9 +2,11 @@
 #include "nav_msgs/Odometry.h"
 #include "ego_planner/Bspline.h"
 #include "quadrotor_msgs/PositionCommand.h"
-#include "std_msgs/Empty.h"
-#include "visualization_msgs/Marker.h"
 #include <ros/ros.h>
+#include <ros/service_server.h>
+#include <tf/LinearMath/Matrix3x3.h>
+#include <tf/LinearMath/Quaternion.h>
+#include <std_srvs/Empty.h>
 
 ros::Publisher pos_cmd_pub;
 
@@ -229,6 +231,26 @@ void cmdCallback(const ros::TimerEvent &e)
   pos_cmd_pub.publish(cmd);
 }
 
+double odom_yaw = 0;
+bool have_odom = false;
+void odomCb(const nav_msgs::OdometryConstPtr &msg) {
+  tf::Quaternion q(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y,
+                   msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
+  double r, p;
+  tf::Matrix3x3(q).getRPY(r, p, odom_yaw);
+  have_odom = true;
+}
+bool setYawServiceCb(std_srvs::Empty::Request  &req, std_srvs::Empty::Response &res) {
+  if (have_odom) {
+    last_yaw_ = odom_yaw;
+    last_yaw_dot_ = 0;
+    ROS_INFO("Reset yaw, yaw_dot to: %.2f, %.2f", last_yaw_, last_yaw_dot_);
+    return true;
+  }
+  ROS_ERROR("Reset yaw fail. No odom data.");
+  return false;
+}
+
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "traj_server");
@@ -236,6 +258,10 @@ int main(int argc, char **argv)
   ros::NodeHandle nh("~");
 
   ros::Subscriber bspline_sub = node.subscribe("planning/bspline", 10, bsplineCallback);
+
+  // use to set yaw from odom
+  ros::Subscriber odom_sub = node.subscribe("/odom_world", 1, odomCb);
+  ros::ServiceServer set_yaw_service = node.advertiseService("/set_yaw", setYawServiceCb);
 
   pos_cmd_pub = node.advertise<quadrotor_msgs::PositionCommand>("/position_cmd", 50);
 
