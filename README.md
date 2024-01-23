@@ -60,7 +60,7 @@ catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release
 In a ROS workspace sourced terminal
 
 ```shell
-roslaunch plan_manage run.launch
+roslaunch ego_planner run.launch
 ```
 
 ------
