@@ -1,13 +1,69 @@
 # Note
 
-This repository is forked from the ego planner. Make the ego planner into a docker image. Run the following line to get the image. Unfinished!
+This repository is forked from the ego planner with some practical modifications. These modifications do not change the original features of the EGO-Planner. These modifications are for better practical use.
+
+## Modifications
+
+1. The fsm exec_state_ will publish to `/planning/exec_state` with message type *ExecStatus*. ([b51ee95](https://github.com/EnderMandS/ego-planner/commit/b51ee95d0ce3d13c28b95a5e9902f613959551fa))
+
+   You can determine the current working state of the planner by subscribing to this topic.
+
+2. Remove flight ceiling. ([bcdd033](https://github.com/EnderMandS/ego-planner/commit/bcdd03385a1a759567ba10ba01cc2d1363e12b18))
+
+3. Remove Rviz obstacle visualisation cap and enlarge the map. ([d33fe99](https://github.com/EnderMandS/ego-planner/commit/d33fe993cb40c60a3bcd781d4063d2d3b4d6d1e7))
+
+4. Add reset yaw service. ([837a63f](https://github.com/EnderMandS/ego-planner/commit/837a63fc75a7458c6b9d17eec886c990e67cb3d0))
+
+   Since the start and end points of the EGO-Planner control are free of yaw constraints. This can be mitigated to some extent by calling this service at the beginning of the planning to set yaw to the angle calculated by the current odometry.
+
+## Docker
+
+The code is compiled into a Docker image. Run the following line to get the image.
 
 ```shell
 docker pull endermands/ego_planner:latest
-docker run --net host --rm --name -it ego_planner endermands/ego_planner:latest
+docker run -it --net host --rm --name ego_planner endermands/ego_planner:latest
 ```
 
+## Compile
 
+#### Prerequisite
+
+Make sure you have ROS full installed.
+
+#### Dependencies
+
+Replace your ROS distro in the following lines.
+
+```shell
+sudo apt update
+sudo apt install -y libarmadillo-dev
+sudo apt install -y ros-noetic-pcl-conversions ros-noetic-pcl-ros ros-noetic-pcl-msgs
+sudo apt install -y ros-noetic-tf ros-noetic-tf2 ros-noetic-laser-geometry
+```
+
+#### Clone & Build
+
+In a ROS sourced terminal
+
+```shell
+git clone --depth 1 https://github.com/EnderMandS/ego-planner.git
+sudo chmod 777 -R ego-planner
+cd ego-planner
+catkin_make -DCATKIN_WHITELIST_PACKAGES="" -DCMAKE_BUILD_TYPE=Release
+```
+
+#### Run
+
+In a ROS workspace sourced terminal
+
+```shell
+roslaunch plan_manage run.launch
+```
+
+------
+
+The following is the README file from the original repository.
 
 # EGO-Swarm
 
