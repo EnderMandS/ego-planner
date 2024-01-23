@@ -25,6 +25,8 @@ docker pull endermands/ego_planner:latest
 docker run -it --net host --rm --name ego_planner endermands/ego_planner:latest
 ```
 
+If you want to make modifications, the image already has zsh and vim installed.
+
 ## Compile
 
 #### Prerequisite
