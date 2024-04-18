@@ -26,3 +26,4 @@ jobs:
         with:
           push: true
           tags: endermands/ego_planner:latest
+          platforms: linux/amd64, linux/arm64
