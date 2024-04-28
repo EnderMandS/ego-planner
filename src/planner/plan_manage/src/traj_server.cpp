@@ -1,4 +1,5 @@
 #include "bspline_opt/uniform_bspline.h"
+#include "geometry_msgs/PoseStamped.h"
 #include "nav_msgs/Odometry.h"
 #include "ego_planner/Bspline.h"
 #include "quadrotor_msgs/PositionCommand.h"
@@ -6,9 +7,11 @@
 #include <ros/service_server.h>
 #include <tf/LinearMath/Matrix3x3.h>
 #include <tf/LinearMath/Quaternion.h>
+#include <tf/transform_datatypes.h>
 #include <std_srvs/Empty.h>
 
-ros::Publisher pos_cmd_pub;
+std::string frame_id;
+ros::Publisher pos_cmd_pub, pos_geo_pub;
 
 quadrotor_msgs::PositionCommand cmd;
 double pos_gain[3] = {0, 0, 0};
@@ -207,7 +210,7 @@ void cmdCallback(const ros::TimerEvent &e)
   time_last = time_now;
 
   cmd.header.stamp = time_now;
-  cmd.header.frame_id = "world";
+  cmd.header.frame_id = frame_id;
   cmd.trajectory_flag = quadrotor_msgs::PositionCommand::TRAJECTORY_STATUS_READY;
   cmd.trajectory_id = traj_id_;
 
@@ -229,6 +232,18 @@ void cmdCallback(const ros::TimerEvent &e)
   last_yaw_ = cmd.yaw;
 
   pos_cmd_pub.publish(cmd);
+
+  geometry_msgs::PoseStamped pose;
+  pose.header.stamp = time_now;
+  pose.header.frame_id = frame_id;
+  pose.pose.position.x = pos(0);
+  pose.pose.position.y = pos(1);
+  pose.pose.position.z = pos(2);
+  tf::Quaternion q;
+  q.setRPY(0,0,yaw_yawdot.first);
+  geometry_msgs::Quaternion q_msg;
+  tf::quaternionTFToMsg(q, pose.pose.orientation);
+  pos_geo_pub.publish(pose);
 }
 
 double odom_yaw = 0;
@@ -264,6 +279,7 @@ int main(int argc, char **argv)
   ros::ServiceServer set_yaw_service = node.advertiseService("/set_yaw", setYawServiceCb);
 
   pos_cmd_pub = node.advertise<quadrotor_msgs::PositionCommand>("/position_cmd", 50);
+  pos_geo_pub = node.advertise<geometry_msgs::PoseStamped>("/position_cmd_geo", 10);
 
   ros::Timer cmd_timer = node.createTimer(ros::Duration(0.01), cmdCallback);
 
@@ -277,12 +293,14 @@ int main(int argc, char **argv)
   cmd.kv[2] = vel_gain[2];
 
   nh.param("traj_server/time_forward", time_forward_, -1.0);
+  nh.param<std::string>("frame_id", frame_id, "odom"); // default to "odom" if not set
+
   last_yaw_ = 0.0;
   last_yaw_dot_ = 0.0;
 
   ros::Duration(1.0).sleep();
 
-  ROS_WARN("[Traj server]: ready.");
+  ROS_INFO("[Traj server]: ready.");
 
   ros::spin();
 

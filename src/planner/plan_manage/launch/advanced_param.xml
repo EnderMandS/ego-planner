@@ -8,6 +8,8 @@
   <arg name="depth_topic"/>
   <arg name="cloud_topic"/>
 
+  <arg name="frame_id"/>
+
   <arg name="cx"/>
   <arg name="cy"/>
   <arg name="fx"/>
@@ -69,14 +71,14 @@
     <param name="fsm/waypoint4_y" value="$(arg point4_y)" type="double"/>
     <param name="fsm/waypoint4_z" value="$(arg point4_z)" type="double"/>
 
-    <param name="grid_map/resolution"      value="0.1" /> 
+    <param name="grid_map/resolution"      value="0.05" /> 
     <param name="grid_map/map_size_x"   value="$(arg map_size_x_)" /> 
     <param name="grid_map/map_size_y"   value="$(arg map_size_y_)" /> 
     <param name="grid_map/map_size_z"   value="$(arg map_size_z_)" /> 
     <param name="grid_map/local_update_range_x"  value="5.5" /> 
     <param name="grid_map/local_update_range_y"  value="5.5" /> 
     <param name="grid_map/local_update_range_z"  value="4.5" /> 
-    <param name="grid_map/obstacles_inflation"     value="0.2" /> 
+    <param name="grid_map/obstacles_inflation"     value="0.15" /> 
     <param name="grid_map/local_map_margin" value="30"/>
     <param name="grid_map/ground_height"        value="-0.01"/>
     <!-- camera parameter -->
@@ -105,7 +107,7 @@
     <param name="grid_map/visualization_truncate_height"   value="2.4"/>  <!-- invalid! Disable in grid_map.cpp -->
     <param name="grid_map/show_occ_time"  value="false"/>
     <param name="grid_map/pose_type"     value="2"/>  
-    <param name="grid_map/frame_id"      value="world"/>
+    <param name="grid_map/frame_id"      value="$(arg frame_id)"/>
 
   <!-- planner manager -->
     <param name="manager/max_vel" value="$(arg max_vel)" type="double"/>

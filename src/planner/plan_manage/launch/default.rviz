@@ -248,7 +248,7 @@ Visualization Manager:
   Global Options:
     Background Color: 255; 253; 224
     Default Light: true
-    Fixed Frame: world
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -284,7 +284,7 @@ Visualization Manager:
       Name: Current View
       Near Clip Distance: 0.00999999978
       Pitch: 0.839797616
-      Target Frame: world
+      Target Frame: odom
       Value: ThirdPersonFollower (rviz)
       Yaw: 3.14544106
     Saved:

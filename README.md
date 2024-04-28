@@ -16,6 +16,8 @@ This repository is forked from the ego planner with some practical modifications
 
    Since the start and end points of the EGO-Planner control are free of yaw constraints. This can be mitigated to some extent by calling this service at the beginning of the planning to set yaw to the angle calculated by the current odometry.
 
+5. Set frame_id as a param, default odom.
+
 ## Docker
 
 The code is compiled into a Docker image. Run the following line to get the image.
